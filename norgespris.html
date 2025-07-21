@@ -1,178 +1,128 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="no">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2575.6">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  <meta charset="UTF-8" />
+  <title>Bør du velge Norgespris?</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://api.fontshare.com/v2/css?f[]=silka@400,700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 2rem;
+      background-color: #000;
+      color: #fff;
+      font-family: 'Silka', sans-serif;
+      display: flex;
+      justify-content: center;
+    }
+    #quiz-container {
+      width: 100%;
+      max-width: 600px;
+      position: relative;
+    }
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 2rem;
+    }
+    .question {
+      margin-bottom: 2rem;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+    }
+    .question.show {
+      opacity: 1;
+    }
+    .question p {
+      font-size: 1.2rem;
+      line-height: 1.5;
+      margin-bottom: 1rem;
+    }
+    .buttons {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .buttons button {
+      flex: 1 1 auto;
+      padding: 0.8rem 1.2rem;
+      font-size: 1rem;
+      background-color: #222;
+      color: #fff;
+      border: 1px solid #fff;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+    .buttons button:hover {
+      background-color: #333;
+    }
+    #result {
+      margin-top: 2rem;
+      font-size: 1.3rem;
+      font-weight: bold;
+    }
+    @media (max-width: 500px) {
+      body { padding: 1rem; }
+      h1 { font-size: 1.4rem; }
+      .buttons button { flex: 1 1 100%; }
+    }
   </style>
 </head>
 <body>
-<p class="p1">&lt;!DOCTYPE html&gt;</p>
-<p class="p1">&lt;html lang="no"&gt;</p>
-<p class="p1">&lt;head&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta charset="UTF-8" /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;title&gt;Bør du velge Norgespris?&lt;/title&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0" /&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;!-- Silka Font from Fontshare --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;link href="https://api.fontshare.com/v2/css?f[]=silka@400,700&amp;display=swap" rel="stylesheet"&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;style&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>* {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>box-sizing: border-box;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>body {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>margin: 0;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>padding: 2rem;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>background-color: #000;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>color: #fff;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>font-family: 'Silka', sans-serif;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>display: flex;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>justify-content: center;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>#quiz-container {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>width: 100%;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>max-width: 600px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>position: relative;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>h1 {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>font-size: 1.8rem;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>margin-bottom: 2rem;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>.question {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>margin-bottom: 2rem;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>opacity: 0;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>transition: opacity 0.5s ease-in-out;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>.question.show {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>opacity: 1;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>.question p {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>font-size: 1.2rem;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>line-height: 1.5;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>margin-bottom: 1rem;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>.buttons {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>display: flex;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>gap: 1rem;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>flex-wrap: wrap;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>.buttons button {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>flex: 1 1 auto;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>padding: 0.8rem 1.2rem;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>font-size: 1rem;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>background-color: #222;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>color: #fff;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>border: 1px solid #fff;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>border-radius: 6px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>cursor: pointer;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>transition: background-color 0.2s ease;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>.buttons button:hover {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>background-color: #333;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>#result {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>margin-top: 2rem;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>font-size: 1.3rem;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>font-weight: bold;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>@media (max-width: 500px) {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>body {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>padding: 1rem;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>h1 {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>font-size: 1.4rem;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>.buttons button {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>flex: 1 1 100%;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/style&gt;</p>
-<p class="p1">&lt;/head&gt;</p>
-<p class="p1">&lt;body&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div id="quiz-container"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;h1&gt;Bør du velge Norgespris?&lt;/h1&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="quiz"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="result"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const questionData = [</p>
-<p class="p1"><span class="Apple-converted-space">      </span>{ id: "high_avg_price", question: "Betaler du mer enn 50 øre/kWh i snitt i løpet av året?" },</p>
-<p class="p1"><span class="Apple-converted-space">      </span>{ id: "high_usage", question: "Bruker husholdningen din mer enn 16 000 kWh i året?" },</p>
-<p class="p1"><span class="Apple-converted-space">      </span>{ id: "south_norway", question: "Bor du i Sør-Norge?" },</p>
-<p class="p1"><span class="Apple-converted-space">      </span>{ id: "wants_stability", question: "Ønsker du forutsigbare strømregninger framfor svingende priser?" },</p>
-<p class="p1"><span class="Apple-converted-space">      </span>{ id: "no_time", question: "Har du lite tid eller lyst til å følge med på strømprisene daglig?" }</p>
-<p class="p1"><span class="Apple-converted-space">    </span>];</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>let current = 0;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>let yesCount = 0;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const quizEl = document.getElementById("quiz");</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const resultEl = document.getElementById("result");</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>function showQuestion() {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>if (current &lt; questionData.length) {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const currentQuestion = questionData[current];</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const questionHTML = `</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="question" id="q${current}"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;p&gt;${currentQuestion.question}&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="buttons"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;button onclick="answer('yes')"&gt;Ja&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;button onclick="answer('no')"&gt;Nei&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>`;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>quizEl.innerHTML = questionHTML;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>// Fade in</p>
-<p class="p1"><span class="Apple-converted-space">        </span>requestAnimationFrame(() =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>document.getElementById(`q${current}`).classList.add('show');</p>
-<p class="p1"><span class="Apple-converted-space">        </span>});</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>} else {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>quizEl.innerHTML = '';</p>
-<p class="p1"><span class="Apple-converted-space">        </span>resultEl.textContent = yesCount &gt;= 3</p>
-<p class="p1"><span class="Apple-converted-space">          </span>? "✅ JA – du burde gå for Norgespris!"</p>
-<p class="p1"><span class="Apple-converted-space">          </span>: "❌ NEI – det lønner seg trolig mer med spotpris og smarte løsninger.";</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>function answer(choice) {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>if (choice === 'yes') yesCount++;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>const currentQuestionEl = document.getElementById(`q${current}`);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>currentQuestionEl.classList.remove('show');</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>setTimeout(() =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>current++;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>showQuestion();</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}, 400); // wait for fade-out</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>showQuestion();</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/script&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;/body&gt;</p>
-<p class="p1">&lt;/html&gt;</p>
+  <div id="quiz-container">
+    <h1>Bør du velge Norgespris?</h1>
+    <div id="quiz"></div>
+    <div id="result"></div>
+  </div>
+  <script>
+    const questionData = [
+      { id: "high_avg_price", question: "Betaler du mer enn 50 øre/kWh i snitt i løpet av året?" },
+      { id: "high_usage", question: "Bruker husholdningen din mer enn 16 000 kWh i året?" },
+      { id: "south_norway", question: "Bor du i Sør-Norge?" },
+      { id: "wants_stability", question: "Ønsker du forutsigbare strømregninger framfor svingende priser?" },
+      { id: "no_time", question: "Har du lite tid eller lyst til å følge med på strømprisene daglig?" }
+    ];
+    let current = 0;
+    let yesCount = 0;
+    const quizEl = document.getElementById("quiz");
+    const resultEl = document.getElementById("result");
+
+    function showQuestion() {
+      if (current < questionData.length) {
+        const currentQuestion = questionData[current];
+        const questionHTML = `
+          <div class="question" id="q${current}">
+            <p>${currentQuestion.question}</p>
+            <div class="buttons">
+              <button onclick="answer('yes')">Ja</button>
+              <button onclick="answer('no')">Nei</button>
+            </div>
+          </div>
+        `;
+        quizEl.innerHTML = questionHTML;
+        requestAnimationFrame(() => {
+          document.getElementById(`q${current}`).classList.add('show');
+        });
+      } else {
+        quizEl.innerHTML = '';
+        resultEl.textContent = yesCount >= 3
+          ? "✅ JA – du burde gå for Norgespris!"
+          : "❌ NEI – det lønner seg trolig mer med spotpris og smarte løsninger.";
+      }
+    }
+
+    function answer(choice) {
+      if (choice === 'yes') yesCount++;
+      const currentQuestionEl = document.getElementById(`q${current}`);
+      currentQuestionEl.classList.remove('show');
+      setTimeout(() => {
+        current++;
+        showQuestion();
+      }, 400);
+    }
+
+    showQuestion();
+  </script>
 </body>
 </html>
