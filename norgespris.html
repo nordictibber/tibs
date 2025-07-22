@@ -116,7 +116,10 @@
     function showQuestion() {
       if (current < questionData.length) {
         const currentQuestion = questionData[current];
-        const imageHTML = (current === 1)
+        const imageHTML =
+        current === 0
+          ? '<img src="https://tibber.imgix.net/zq85bj8o2ot3/EFUFydUsgegdBUP0iQmUF/3e9e778678d70f90328b2f8ae984cc35/Ny_kutt_kostnadene_screen.png?w=1024&fl=progressive&auto=format,compress&cs=tinysrgb" alt="Kutt kostnadene" style="max-width: 100%; max-height: 300px; margin-bottom: 1rem; border-radius: 6px;" />'
+          : current === 1
           ? '<img src="https://tibber.imgix.net/zq85bj8o2ot3/4vHo6Kzilaho1mPue5Bouv/109f167f3250a6c79f75498af67922ef/weekly-price-forecast_energy-market-no.png?w=1280&fl=progressive&auto=format,compress&cs=tinysrgb" alt="Strømpriser" style="max-width: 100%; max-height: 300px; margin-bottom: 1rem; border-radius: 6px;" />'
           : '';
 
