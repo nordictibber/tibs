@@ -110,31 +110,39 @@
     });
 
     const questionData = [
-      {
-        question: "Betaler du i snitt mer enn 50 øre/kWh (inkl. mva) for strøm i dag?",
-        image: imageUrls[0]
-      },
-      {
-        question: "Bor du i Sør-Norge, der strømprisene ofte er høyere enn i nord?",
-        image: imageUrls[1]
-      },
-      {
-        question: "Bruker du mer enn 5000 kWh i måneden (eller 1000 i fritidsbolig)?",
-        image: imageUrls[2]
-      },
-      {
-        question: "Ønsker du mer forutsigbare strømregninger – selv om det noen måneder kan koste litt mer?",
-        image: imageUrls[3]
-      },
-      {
-        question: "Vil du helst slippe å følge med på strømprisene hver dag?",
-        image: imageUrls[4]
-      },
-      {
-        question: "Flytter du ofte strømforbruket ditt til perioder hvor det er billigst?",
-        image: imageUrls[5]
-      }
-    ];
+  {
+    question: "Betaler du i snitt mer enn 50 øre/kWh (inkl. mva) for strøm i dag?",
+    image: imageUrls[0]
+  },
+  {
+    question: "Bor du i Sør-Norge?",
+    image: imageUrls[1]
+  },
+  {
+    question: "Bruker du mer enn 5000 kWh i måneden i boligen din, eller over 1000 kWh i fritidsboligen?",
+    image: imageUrls[2]
+  },
+  {
+    question: "Ønsker du mer forutsigbare strømregninger – selv om det noen måneder kan koste litt mer?",
+    image: imageUrls[3]
+  },
+  {
+    question: "Vil du helst slippe å følge med på strømprisene og bruke strøm uten å tenke så mye på kostnaden?",
+    image: imageUrls[4]
+  },
+  {
+    question: "Flytter du ofte strømforbruket ditt til tider hvor strømmen er billigst?",
+    image: imageUrls[5]
+  },
+  {
+    question: "Er du komfortabel med bindingstider på strømavtalen?",
+    image: "https://images.ctfassets.net/zq85bj8o2ot3/3aEyNjPKPYcgCBlf9DHQet/0668c3c47f91c29c20995d84fe2fd524/norgespris_vilkaar.png"
+  },
+  {
+    question: "Er det viktig for deg at Norgespris også gjelder for fritidseiendommer?",
+    image: "https://images.ctfassets.net/zq85bj8o2ot3/4pM17pH1bWxIwv5Ng9EvVE/f5b2b8c5c93a30df22ecbb9f602c4f79/hytte_fritidsbolig.png"
+  }
+];
 
     let current = 0;
     let yesCount = 0;
@@ -195,16 +203,41 @@
         document.getElementById("progress-bar").style.display = "none";
 
         let resultText = "";
-        if (yesCount >= 5) {
-          resultText = `<p>✅ JA – du kan ha nytte av å gå for Norgespris.</p>
-          <p>Du har svart ja på mange av spørsmålene, og det tyder på at du ønsker mer forutsigbarhet, har høyt strømforbruk og bor i et område der prisen ofte er høy. Norgespris kan være et godt valg for deg.</p>`;
-        } else if (yesCount <= 2) {
-          resultText = `<p>❌ NEI – det er ikke sikkert Norgespris er riktig for deg.</p>
-          <p>Du virker som en som har kontroll, kanskje lavere forbruk, og nyter godt av dagens strømstøtteordning. Fortsett med det som fungerer for deg.</p>`;
-        } else {
-          resultText = `<p>🤔 Vi klarer ikke si helt sikkert om Norgespris er et godt valg for deg.</p>
-          <p>Noen svar peker én vei, andre peker en annen. Les mer på <a href='https://tibber.com/no/norgespris' style='color:#23B8CC;'>tibber.com/no/norgespris</a>, så finner du kanskje ut hva som passer best.</p>`;
-        }
+        const scoreMap = [
+  { yes: false, no: true, unknown: false }, // Q1
+  { yes: true, no: false, unknown: false }, // Q2
+  { yes: false, no: true, unknown: false }, // Q3
+  { yes: true, no: false, unknown: false }, // Q4
+  { yes: true, no: false, unknown: false }, // Q5
+  { yes: false, no: true, unknown: false }, // Q6
+  { yes: true, no: false, unknown: false }, // Q7
+  { yes: true, no: false, unknown: false }, // Q8
+];
+
+let recommend = 0;
+let notRecommend = 0;
+
+for (let i = 0; i < answers.length; i++) {
+  const choice = answers[i];
+  if (choice === 'yes' && scoreMap[i].yes) recommend++;
+  else if (choice === 'no' && scoreMap[i].no) notRecommend++;
+  else if (choice === 'unknown') continue;
+  else {
+    if (scoreMap[i].yes) notRecommend++;
+    else recommend++;
+  }
+}
+
+if (recommend > notRecommend) {
+  resultText = `<p>✅ JA – du kan ha nytte av å gå for Norgespris.</p>
+  <p>Norgespris passer best for deg som ønsker forutsigbarhet, ikke følger med på timespriser, eller har høyt forbruk og bor i Sør-Norge. I slike tilfeller kan 50 øre/kWh være billigere totalt sett – og du slipper å stresse med når på døgnet strømmen er billigst.</p>`;
+} else if (notRecommend > recommend) {
+  resultText = `<p>❌ NEI – det er ikke sikkert Norgespris er riktig for deg.</p>
+  <p>Du virker å ha kontroll på forbruket, følger med på strømprisene og bor kanskje i en del av landet med lavere gjennomsnittspris. Da kan du spare mer med spotpris og dagens strømstøtteordning, fremfor å binde deg til fastpris i ett år.</p>`;
+} else {
+  resultText = `<p>🤔 Vi klarer ikke si helt sikkert om Norgespris er et godt valg for deg.</p>
+  <p>Noen svar peker mot forutsigbarhet og høy pris, mens andre tyder på lavere behov eller mer fleksibilitet. Les mer på <a href="https://tibber.com/no/norgespris" style="color:#23B8CC;">tibber.com/no/norgespris</a>, så kan du lettere vurdere hva som passer deg best.</p>`;
+}
 
         resultEl.innerHTML = resultText +
           '<div class="buttons" style="margin-top: 2rem; justify-content: center;"><button style="padding: 0.6rem 1rem; font-size: 0.9rem;" onclick="startQuiz()">Ta testen på nytt</button></div>';
