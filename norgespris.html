@@ -20,17 +20,17 @@
       width: 100%;
       max-width: 600px;
       position: relative;
+      text-align: center;
     }
     h1 {
       font-size: 1.8rem;
       margin-bottom: 2rem;
     }
-    .question {
-      margin-bottom: 2rem;
+    .intro, .question, #result {
       opacity: 0;
       transition: opacity 0.5s ease-in-out;
     }
-    .question.show {
+    .intro.show, .question.show, #result.show {
       opacity: 1;
     }
     .question p {
@@ -42,6 +42,7 @@
       display: flex;
       gap: 1rem;
       flex-wrap: wrap;
+      justify-content: center;
     }
     .buttons button {
       flex: 1 1 auto;
@@ -59,8 +60,9 @@
     }
     #result {
       margin-top: 2rem;
-      font-size: 1.3rem;
-      font-weight: bold;
+      font-size: 1.1rem;
+      font-weight: normal;
+      text-align: left;
     }
     @media (max-width: 500px) {
       body { padding: 1rem; }
@@ -71,28 +73,42 @@
 </head>
 <body>
   <div id="quiz-container">
-    <h1>Bør du velge Norgespris?</h1>
+    <div id="intro" class="intro show">
+      <h1>Bør du velge Norgespris?</h1>
+      <button onclick="startQuiz()">Ta testen</button>
+    </div>
     <div id="quiz"></div>
     <div id="result"></div>
   </div>
   <script>
     const questionData = [
-      { id: "high_avg_price", question: "Betaler du mer enn 50 øre/kWh i snitt i løpet av året?" },
-      { id: "high_usage", question: "Bruker husholdningen din mer enn 16 000 kWh i året?" },
-      { id: "south_norway", question: "Bor du i Sør-Norge?" },
-      { id: "wants_stability", question: "Ønsker du forutsigbare strømregninger framfor svingende priser?" },
-      { id: "no_time", question: "Har du lite tid eller lyst til å følge med på strømprisene daglig?" }
+      { question: "Betaler du i snitt mer enn 50 øre/kWh (inkl. mva) for strøm i dag?" },
+      { question: "Bor du i Sør-Norge, der strømprisene ofte er høyere enn i nord?" },
+      { question: "Bruker du mer enn 5000 kWh i måneden (eller 1000 i fritidsbolig)?" },
+      { question: "Ønsker du mer forutsigbare strømregninger – selv om det noen måneder kan koste litt mer?" },
+      { question: "Vil du helst slippe å følge med på strømprisene hver dag?" },
+      { question: "Flytter du sjelden eller aldri strømforbruket ditt til tider med lav pris (som natt og helg)?" }
     ];
+
     let current = 0;
     let yesCount = 0;
+    const introEl = document.getElementById("intro");
     const quizEl = document.getElementById("quiz");
     const resultEl = document.getElementById("result");
+
+    function startQuiz() {
+      introEl.classList.remove('show');
+      setTimeout(() => {
+        introEl.style.display = "none";
+        showQuestion();
+      }, 400);
+    }
 
     function showQuestion() {
       if (current < questionData.length) {
         const currentQuestion = questionData[current];
         const questionHTML = `
-          <div class="question" id="q${current}">
+          <div class="question show" id="q${current}">
             <p>${currentQuestion.question}</p>
             <div class="buttons">
               <button onclick="answer('yes')">Ja</button>
@@ -101,14 +117,35 @@
           </div>
         `;
         quizEl.innerHTML = questionHTML;
-        requestAnimationFrame(() => {
-          document.getElementById(`q${current}`).classList.add('show');
-        });
       } else {
         quizEl.innerHTML = '';
-        resultEl.textContent = yesCount >= 3
-          ? "✅ JA – du burde gå for Norgespris!"
-          : "❌ NEI – det lønner seg trolig mer med spotpris og smarte løsninger.";
+        let resultText = '';
+        if (yesCount <= 1) {
+          resultText = `
+            <strong>❌ Nei – spotpris og smarte løsninger passer trolig bedre for deg</strong><br><br>
+            Svarene dine tyder på at du enten følger godt med på strømprisene, flytter forbruket ditt bevisst, eller har et lavt strømforbruk.<br>
+            Da vil du ofte kunne oppnå en lavere snittpris enn det Norgespris tilbyr – spesielt hvis du bruker smartlading, automasjon eller Grid Rewards.<br>
+            Norgespris er laget for de som ønsker forutsigbarhet, ikke nødvendigvis laveste pris. Du virker som typen som allerede har kontroll.<br><br>
+            → <a href="https://tibber.com/no/slaa-norgespris" target="_blank">Se hvordan du kan slå Norgespris med Tibber</a>
+          `;
+        } else if (yesCount <= 4) {
+          resultText = `
+            <strong>🤔 Midt på treet – vi klarer ikke å si det helt sikkert</strong><br><br>
+            Noen svar peker i retning av fastpris, mens andre tyder på at du kan spare mer med spotpris og smarte løsninger.<br>
+            I så fall anbefaler vi at du tar en nærmere titt selv og vurderer hva som passer best i din hverdag.<br><br>
+            → <a href="https://tibber.com/no/norgespris" target="_blank">Les mer og ta valget selv</a>
+          `;
+        } else {
+          resultText = `
+            <strong>✅ Ja – du kan ha nytte av å velge Norgespris!</strong><br><br>
+            Du har svart "ja" på de fleste spørsmålene – og da er Norgespris sannsynligvis midt i blinken for deg.<br>
+            Du bor kanskje i en del av landet hvor strømprisene ofte er høye, bruker lite tid på å følge med på spotprisene, og ønsker deg stabile regninger uten overraskelser.<br>
+            Med Norgespris får du en trygg og forutsigbar strømavtale – helt uten bindingstid, og med lavere risiko for høye vinterregninger.<br><br>
+            → <a href="https://tibber.com/no/norgespris" target="_blank">Les mer om hvordan det fungerer</a>
+          `;
+        }
+        resultEl.innerHTML = resultText;
+        resultEl.classList.add('show');
       }
     }
 
@@ -121,8 +158,6 @@
         showQuestion();
       }, 400);
     }
-
-    showQuestion();
   </script>
 </body>
 </html>
