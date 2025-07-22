@@ -94,12 +94,18 @@
 
     let current = 0;
     let yesCount = 0;
+    let answers = [];
     const introEl = document.getElementById("intro");
     const quizEl = document.getElementById("quiz");
     const resultEl = document.getElementById("result");
 
     function startQuiz() {
+      current = 0;
+      yesCount = 0;
+      answers = [];
       introEl.classList.remove('show');
+      resultEl.classList.remove('show');
+      resultEl.innerHTML = '';
       setTimeout(() => {
         introEl.style.display = "none";
         showQuestion();
@@ -117,6 +123,7 @@
               <button onclick="answer('no')">Nei</button>
               <button onclick="answer('unknown')">Vet ikke</button>
             </div>
+            ${current > 0 ? '<div class="buttons" style="margin-top: 1rem;"><button onclick="goBack()">Tilbake</button></div>' : ''}
           </div>
         `;
         quizEl.innerHTML = questionHTML;
@@ -125,41 +132,56 @@
         let resultText = '';
         if (yesCount <= 1) {
           resultText = `
-            <strong>❌ Nei – spotpris og dagens strømstøtteordning passer trolig bedre for deg</strong><br><br><br><br><br>
-Svarene dine tyder på at du enten følger godt med på strømprisene, flytter forbruket ditt bevisst, eller har et lavt strømforbruk.<br><br><br>
-Da vil du ofte kunne oppnå en lavere snittpris enn det Norgespris tilbyr – spesielt hvis du benytter deg av dagens strømstøtteordning og er bevisst på når du bruker strøm.<br>
-            Norgespris er laget for de som ønsker forutsigbarhet, ikke nødvendigvis laveste pris. Du virker som typen som allerede har kontroll.<br><br>
-            → <a href="https://tibber.com/no/slaa-norgespris" target="_blank">Se hvordan du kan slå Norgespris med Tibber</a>
+            <strong>❌ Nei – spotpris og dagens strømstøtteordning passer trolig bedre for deg</strong><br><br>
+
+Svarene dine tyder på at du enten følger godt med på strømprisene, flytter forbruket ditt bevisst, eller har et lavt strømforbruk.<br><br>
+
+Da vil du ofte kunne oppnå en lavere snittpris enn det Norgespris tilbyr – spesielt hvis du benytter deg av dagens strømstøtteordning og er bevisst på når du bruker strøm.<br><br>
+
+Norgespris er laget for de som ønsker forutsigbarhet, ikke nødvendigvis laveste pris. Du virker som typen som allerede har kontroll.<br><br>
+
+→ <a href="https://tibber.com/no/slaa-norgespris" target="_blank">Se hvordan du kan slå Norgespris med Tibber</a>
           `;
         } else if (yesCount <= 4) {
           resultText = `
             <strong>🤔 Vi klarer ikke si helt sikkert om Norgespris er et godt valg for deg</strong><br><br>
-            Noen svar peker i retning av fastpris, mens andre tyder på at du kan spare mer med spotpris og smarte løsninger.<br>
-            I så fall anbefaler vi at du tar en nærmere titt selv og vurderer hva som passer best i din hverdag.<br><br>
-            → <a href="https://tibber.com/no/norgespris" target="_blank">Les mer og ta valget selv</a>
+
+Noen svar peker i retning av fastpris, mens andre tyder på at du kan spare mer med spotpris og smarte løsninger.<br><br>
+
+I så fall anbefaler vi at du tar en nærmere titt selv og vurderer hva som passer best i din hverdag.<br><br>
+
+→ <a href="https://tibber.com/no/norgespris" target="_blank">Les mer og ta valget selv</a>
           `;
         } else {
           resultText = `
             <strong>✅ Ja – du kan ha nytte av å velge Norgespris!</strong><br><br>
-            Du har svart "ja" på de fleste spørsmålene – og da er Norgespris sannsynligvis midt i blinken for deg.<br>
-            Du bor kanskje i en del av landet hvor strømprisene ofte er høye, bruker lite tid på å følge med på spotprisene, og ønsker deg stabile regninger uten overraskelser.<br>
-            Med Norgespris får du en trygg og forutsigbar strømavtale – helt uten bindingstid, og med lavere risiko for høye vinterregninger.<br><br>
-            → <a href="https://tibber.com/no/norgespris" target="_blank">Les mer om hvordan det fungerer</a>
+
+Du har svart "ja" på de fleste spørsmålene – og da er Norgespris sannsynligvis midt i blinken for deg.<br><br>
+
+Du bor kanskje i en del av landet hvor strømprisene ofte er høye, bruker lite tid på å følge med på spotprisene, og ønsker deg stabile regninger uten overraskelser.<br><br>
+
+Med Norgespris får du en trygg og forutsigbar strømavtale – helt uten bindingstid, og med lavere risiko for høye vinterregninger.<br><br>
+
+→ <a href="https://tibber.com/no/norgespris" target="_blank">Les mer om hvordan det fungerer</a>
           `;
         }
-        resultEl.innerHTML = resultText;
+        resultEl.innerHTML = resultText + '<div class="buttons" style="margin-top: 2rem;"><button onclick="startQuiz()">Ta testen på nytt</button></div>';
         resultEl.classList.add('show');
       }
     }
 
     function answer(choice) {
+      answers[current] = choice;
       if (choice === 'yes') yesCount++;
-      const currentQuestionEl = document.getElementById(`q${current}`);
-      currentQuestionEl.classList.remove('show');
-      setTimeout(() => {
-        current++;
-        showQuestion();
-      }, 400);
+      current++;
+      showQuestion();
+    }
+
+    function goBack() {
+      if (current === 0) return;
+      current--;
+      if (answers[current] === 'yes') yesCount--;
+      showQuestion();
     }
   </script>
 </body>
