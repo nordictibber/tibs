@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="no">
 <head>
+  <link rel="preload" as="image" href="https://tibber.imgix.net/zq85bj8o2ot3/EFUFydUsgegdBUP0iQmUF/3e9e778678d70f90328b2f8ae984cc35/Ny_kutt_kostnadene_screen.png" />
+  <link rel="preload" as="image" href="https://tibber.imgix.net/zq85bj8o2ot3/4vHo6Kzilaho1mPue5Bouv/109f167f3250a6c79f75498af67922ef/weekly-price-forecast_energy-market-no.png" />
+  <link rel="preload" as="image" href="https://tibber.imgix.net/zq85bj8o2ot3/79KVsbsjnA0VFbZ0ysNeig/ad6d2b1751b7946bf477ce5c487e8bbc/220913-Tibber_Pulse-Han_2356.jpg" />
   <meta charset="UTF-8" />
   <title>Bør du velge Norgespris?</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -142,6 +145,9 @@
           '</div>';
 
         quizEl.innerHTML = questionHTML;
+        requestAnimationFrame(() => {
+          document.getElementById(`q${current}`)?.classList.add('show');
+        });
       } else {
         quizEl.innerHTML = '';
         let resultText = '';
@@ -186,11 +192,19 @@ Med Norgespris får du en trygg og forutsigbar strømavtale – helt uten bindin
     }
 
     function answer(choice) {
-      answers[current] = choice;
-      if (choice === 'yes') yesCount++;
-      current++;
-      showQuestion();
-    }
+  answers[current] = choice;
+  if (choice === 'yes') yesCount++;
+
+  const currentQuestionEl = document.getElementById(`q${current}`);
+  if (currentQuestionEl) {
+    currentQuestionEl.classList.remove('show');
+  }
+
+  setTimeout(() => {
+    current++;
+    showQuestion();
+  }, 400);
+}
 
     function goBack() {
       if (current === 0) return;
