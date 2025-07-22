@@ -48,15 +48,15 @@
       flex: 1 1 auto;
       padding: 0.8rem 1.2rem;
       font-size: 1rem;
-      background-color: #222;
+      background-color: #23B8CC;
       color: #fff;
-      border: 1px solid #fff;
+      border: none;
       border-radius: 6px;
       cursor: pointer;
       transition: background-color 0.2s ease;
     }
     .buttons button:hover {
-      background-color: #333;
+      background-color: #1aa1b3;
     }
     #result {
       margin-top: 2rem;
@@ -75,7 +75,9 @@
   <div id="quiz-container">
     <div id="intro" class="intro show">
       <h1>Bør du velge Norgespris?</h1>
-      <button onclick="startQuiz()">Ta testen</button>
+      <div class="buttons">
+        <button onclick="startQuiz()">Ta testen</button>
+      </div>
     </div>
     <div id="quiz"></div>
     <div id="result"></div>
@@ -113,6 +115,7 @@
             <div class="buttons">
               <button onclick="answer('yes')">Ja</button>
               <button onclick="answer('no')">Nei</button>
+              <button onclick="answer('unknown')">Vet ikke</button>
             </div>
           </div>
         `;
