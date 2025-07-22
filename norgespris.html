@@ -116,19 +116,26 @@
     function showQuestion() {
       if (current < questionData.length) {
         const currentQuestion = questionData[current];
-        const imageHTML = (current === 1) ? '<img src="https://tibber.imgix.net/zq85bj8o2ot3/4vHo6Kzilaho1mPue5Bouv/109f167f3250a6c79f75498af67922ef/weekly-price-forecast_energy-market-no.png?w=1280&fl=progressive&auto=format,compress&cs=tinysrgb" alt="Strømpriser" style="max-width: 100%; max-height: 300px; margin-bottom: 1rem; border-radius: 6px;" />' : '';
-        const questionHTML = `
-          <div class="question show" id="q\${current}">
-            \${imageHTML}
-            <p>\${currentQuestion.question}</p>
-            <div class="buttons">
-              <button onclick="answer('yes')">Ja</button>
-              <button onclick="answer('no')">Nei</button>
-              <button onclick="answer('unknown')">Vet ikke</button>
-            </div>
-            ${current > 0 ? '<div style="margin-top: 1.5rem; text-align: left;"><a href="#" onclick="goBack()" style="color: #23B8CC; text-decoration: underline; font-size: 0.95rem;">Tilbake</a></div>' : ''}
-          </div>
-        `;
+        const imageHTML = (current === 1)
+          ? '<img src="https://tibber.imgix.net/zq85bj8o2ot3/4vHo6Kzilaho1mPue5Bouv/109f167f3250a6c79f75498af67922ef/weekly-price-forecast_energy-market-no.png?w=1280&fl=progressive&auto=format,compress&cs=tinysrgb" alt="Strømpriser" style="max-width: 100%; max-height: 300px; margin-bottom: 1rem; border-radius: 6px;" />'
+          : '';
+
+        const backLink = current > 0
+          ? '<div style="margin-top: 1.5rem; text-align: left;"><a href="#" onclick="goBack()" style="color: #23B8CC; text-decoration: underline; font-size: 0.95rem;">Tilbake</a></div>'
+          : '';
+
+        const questionHTML =
+          '<div class="question show" id="q' + current + '">' +
+          imageHTML +
+          '<p>' + currentQuestion.question + '</p>' +
+          '<div class="buttons">' +
+          '<button onclick="answer(\'yes\')">Ja</button>' +
+          '<button onclick="answer(\'no\')">Nei</button>' +
+          '<button onclick="answer(\'unknown\')">Vet ikke</button>' +
+          '</div>' +
+          backLink +
+          '</div>';
+
         quizEl.innerHTML = questionHTML;
       } else {
         quizEl.innerHTML = '';
