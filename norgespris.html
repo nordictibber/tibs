@@ -85,6 +85,9 @@
     </div>
     <div id="quiz"></div>
     <div id="result"></div>
+    <div id="progress-bar" style="height: 6px; width: 100%; background-color: #333; margin-top: 1.5rem;">
+      <div id="progress" style="height: 100%; width: 0%; background-color: #23B8CC; transition: width 0.4s ease;"></div>
+    </div>
   </div>
   <script>
     const questionData = [
@@ -120,15 +123,15 @@
       if (current < questionData.length) {
         const currentQuestion = questionData[current];
         const imageHTML =
-        current === 0
-          ? '<img src="https://images.ctfassets.net/zq85bj8o2ot3/3lRXlegY6drp3xZJ50oI7k/4c670545c610e232f698a488d94cac9b/snittpris.png" alt="Snittpris" style="max-width: 100%; max-height: 300px; margin-bottom: 1rem; border-radius: 6px;" />'
-          : current === 1
-          ? '<img src="https://tibber.imgix.net/zq85bj8o2ot3/4vHo6Kzilaho1mPue5Bouv/109f167f3250a6c79f75498af67922ef/weekly-price-forecast_energy-market-no.png?w=1280&fl=progressive&auto=format,compress&cs=tinysrgb" alt="Strømpriser" style="max-width: 100%; max-height: 300px; margin-bottom: 1rem; border-radius: 6px;" />'
-          : current === 2
-          ? '<img src="https://tibber.imgix.net/zq85bj8o2ot3/79KVsbsjnA0VFbZ0ysNeig/ad6d2b1751b7946bf477ce5c487e8bbc/220913-Tibber_Pulse-Han_2356.jpg?w=1600&fl=progressive&auto=format,compress&cs=tinysrgb" alt="Pulse HAN" style="max-width: 100%; max-height: 300px; margin-bottom: 1rem; border-radius: 6px;" />'
-          : current === 3
-          ? '<img src="https://images.ctfassets.net/zq85bj8o2ot3/1zs2STSZpObZPLJKPuhiEB/011370db1ec9760cf8b32b8f91c3187f/betalt_regning.png" alt="Betalt regning" style="max-width: 100%; max-height: 300px; margin-bottom: 1rem; border-radius: 6px;" />'
-          : '';
+          current === 0
+            ? '<img src="https://images.ctfassets.net/zq85bj8o2ot3/3lRXlegY6drp3xZJ50oI7k/4c670545c610e232f698a488d94cac9b/snittpris.png" alt="Snittpris" style="max-width: 100%; max-height: 300px; margin-bottom: 1rem; border-radius: 6px;" />'
+            : current === 1
+            ? '<img src="https://tibber.imgix.net/zq85bj8o2ot3/4vHo6Kzilaho1mPue5Bouv/109f167f3250a6c79f75498af67922ef/weekly-price-forecast_energy-market-no.png?w=1280&fl=progressive&auto=format,compress&cs=tinysrgb" alt="Strømpriser" style="max-width: 100%; max-height: 300px; margin-bottom: 1rem; border-radius: 6px;" />'
+            : current === 2
+            ? '<img src="https://tibber.imgix.net/zq85bj8o2ot3/79KVsbsjnA0VFbZ0ysNeig/ad6d2b1751b7946bf477ce5c487e8bbc/220913-Tibber_Pulse-Han_2356.jpg?w=1600&fl=progressive&auto=format,compress&cs=tinysrgb" alt="Pulse HAN" style="max-width: 100%; max-height: 300px; margin-bottom: 1rem; border-radius: 6px;" />'
+            : current === 3
+            ? '<img src="https://images.ctfassets.net/zq85bj8o2ot3/1zs2STSZpObZPLJKPuhiEB/011370db1ec9760cf8b32b8f91c3187f/betalt_regning.png" alt="Betalt regning" style="max-width: 100%; max-height: 300px; margin-bottom: 1rem; border-radius: 6px;" />'
+            : '';
 
         const backLink = current > 0
           ? '<div style="margin-top: 1.5rem; text-align: left;"><a href="#" onclick="goBack()" style="color: #23B8CC; text-decoration: underline; font-size: 0.95rem;">Tilbake</a></div>'
@@ -150,63 +153,54 @@
         requestAnimationFrame(() => {
           document.getElementById(`q${current}`)?.classList.add('show');
         });
+        const progress = document.getElementById("progress");
+        const percent = ((current) / questionData.length) * 100;
+        progress.style.width = percent + "%";
       } else {
         quizEl.innerHTML = '';
         let resultText = '';
         if (yesCount <= 1) {
           resultText = `
             <strong>❌ Nei – spotpris og dagens strømstøtteordning passer trolig bedre for deg</strong><br><br>
-
 Svarene dine tyder på at du enten følger godt med på strømprisene, flytter forbruket ditt bevisst, eller har et lavt strømforbruk.<br><br>
-
 Da vil du ofte kunne oppnå en lavere snittpris enn det Norgespris tilbyr – spesielt hvis du benytter deg av dagens strømstøtteordning og er bevisst på når du bruker strøm.<br><br>
-
 Norgespris er laget for de som ønsker forutsigbarhet, ikke nødvendigvis laveste pris. Du virker som typen som allerede har kontroll.<br><br>
-
 → <a href="https://tibber.com/no/slaa-norgespris" target="_blank">Se hvordan du kan slå Norgespris med Tibber</a>
           `;
         } else if (yesCount <= 4) {
           resultText = `
             <strong>🤔 Vi klarer ikke si helt sikkert om Norgespris er et godt valg for deg</strong><br><br>
-
 Noen svar peker i retning av fastpris, mens andre tyder på at du kan spare mer med spotpris og smarte løsninger.<br><br>
-
 I så fall anbefaler vi at du tar en nærmere titt selv og vurderer hva som passer best i din hverdag.<br><br>
-
 → <a href="https://tibber.com/no/norgespris" target="_blank">Les mer og ta valget selv</a>
           `;
         } else {
           resultText = `
             <strong>✅ Ja – du kan ha nytte av å velge Norgespris!</strong><br><br>
-
 Du har svart "ja" på de fleste spørsmålene – og da er Norgespris sannsynligvis midt i blinken for deg.<br><br>
-
 Du bor kanskje i en del av landet hvor strømprisene ofte er høye, bruker lite tid på å følge med på spotprisene, og ønsker deg stabile regninger uten overraskelser.<br><br>
-
 Med Norgespris får du en trygg og forutsigbar strømavtale – helt uten bindingstid, og med lavere risiko for høye vinterregninger.<br><br>
-
 → <a href="https://tibber.com/no/norgespris" target="_blank">Les mer om hvordan det fungerer</a>
           `;
         }
+        document.getElementById("progress").style.width = "100%";
         resultEl.innerHTML = resultText + '<div class="buttons" style="margin-top: 2rem;"><button onclick="startQuiz()">Ta testen på nytt</button></div>';
         resultEl.classList.add('show');
       }
     }
 
     function answer(choice) {
-  answers[current] = choice;
-  if (choice === 'yes') yesCount++;
-
-  const currentQuestionEl = document.getElementById(`q${current}`);
-  if (currentQuestionEl) {
-    currentQuestionEl.classList.remove('show');
-  }
-
-  setTimeout(() => {
-    current++;
-    showQuestion();
-  }, 400);
-}
+      answers[current] = choice;
+      if (choice === 'yes') yesCount++;
+      const currentQuestionEl = document.getElementById(`q${current}`);
+      if (currentQuestionEl) {
+        currentQuestionEl.classList.remove('show');
+      }
+      setTimeout(() => {
+        current++;
+        showQuestion();
+      }, 400);
+    }
 
     function goBack() {
       if (current === 0) return;
