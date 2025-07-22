@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <title>Bør du velge Norgespris?</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link href="https://api.fontshare.com/v2/css?f[]=silka@400,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; }
     body {
@@ -12,7 +12,7 @@
       padding: 2rem;
       background-color: #000;
       color: #fff;
-      font-family: 'Silka', sans-serif;
+      font-family: 'Inter', sans-serif;
       display: flex;
       justify-content: center;
     }
@@ -89,7 +89,7 @@
       { question: "Bruker du mer enn 5000 kWh i måneden (eller 1000 i fritidsbolig)?" },
       { question: "Ønsker du mer forutsigbare strømregninger – selv om det noen måneder kan koste litt mer?" },
       { question: "Vil du helst slippe å følge med på strømprisene hver dag?" },
-      { question: "Flytter du sjelden eller aldri strømforbruket ditt til tider med lav pris (som natt og helg)?" }
+      { question: "Flytter du ofte strømforbruket ditt til perioder hvor det er billigst?" }
     ];
 
     let current = 0;
@@ -125,15 +125,15 @@
         let resultText = '';
         if (yesCount <= 1) {
           resultText = `
-            <strong>❌ Nei – spotpris og smarte løsninger passer trolig bedre for deg</strong><br><br>
-            Svarene dine tyder på at du enten følger godt med på strømprisene, flytter forbruket ditt bevisst, eller har et lavt strømforbruk.<br>
-            Da vil du ofte kunne oppnå en lavere snittpris enn det Norgespris tilbyr – spesielt hvis du bruker smartlading, automasjon eller Grid Rewards.<br>
+            <strong>❌ Nei – spotpris og dagens strømstøtteordning passer trolig bedre for deg</strong><br><br><br><br><br>
+Svarene dine tyder på at du enten følger godt med på strømprisene, flytter forbruket ditt bevisst, eller har et lavt strømforbruk.<br><br><br>
+Da vil du ofte kunne oppnå en lavere snittpris enn det Norgespris tilbyr – spesielt hvis du benytter deg av dagens strømstøtteordning og er bevisst på når du bruker strøm.<br>
             Norgespris er laget for de som ønsker forutsigbarhet, ikke nødvendigvis laveste pris. Du virker som typen som allerede har kontroll.<br><br>
             → <a href="https://tibber.com/no/slaa-norgespris" target="_blank">Se hvordan du kan slå Norgespris med Tibber</a>
           `;
         } else if (yesCount <= 4) {
           resultText = `
-            <strong>🤔 Midt på treet – vi klarer ikke å si det helt sikkert</strong><br><br>
+            <strong>🤔 Vi klarer ikke si helt sikkert om Norgespris er et godt valg for deg</strong><br><br>
             Noen svar peker i retning av fastpris, mens andre tyder på at du kan spare mer med spotpris og smarte løsninger.<br>
             I så fall anbefaler vi at du tar en nærmere titt selv og vurderer hva som passer best i din hverdag.<br><br>
             → <a href="https://tibber.com/no/norgespris" target="_blank">Les mer og ta valget selv</a>
