@@ -51,7 +51,7 @@
   <!-- STEP EV 2 details -->
   <div class="step" id="stepEV2">
     <h2>Elbil-forbruk</h2>
-    <p class="muted ev-intro">Vi har tatt utgangspunkt i en elbil med et 75 kWh batteri, et forbruk på 20 kWh/100 km og en årlig kjørelengde på 15 000 km, men du kan endre dette om du vet dine eksakte tall.</p>
+    <p class="muted ev-intro">Vi har tatt utgangspunkt i en elbil med et 75 kWh batteri, et forbruk på 20 kWh/100 km og en årlig kjørelengde på 15 000 km, men du kan endre dette om du vet dine egne tall.</p>
     <div class="grid-3">
       <div>
         <label for="evBattery">Bilens batteristørrelse (kWh)</label>
@@ -73,7 +73,7 @@
   <!-- STEP SMARTLADING -->
   <div class="step" id="stepSmart">
     <h2>Bruker du Smartlading fra Tibber?</h2>
-      <p style="text-align:center">Kunder som bruker Smartlading sparer i gjennomsnitt 39% på ladingen vs. spotpris. Dette inngår i beregningen.</p>
+      <p style="text-align:center">Kunder som bruker Smartlading sparer i gjennomsnitt 39% på ladekostnader. Dette inngår i beregningen.</p>
     <div class="choice-container">
       <div class="choice-button" data-smart="yes">Ja</div>
       <div class="choice-button" data-smart="no">Nei</div>
@@ -109,7 +109,7 @@
   <!-- STEP 2 BOLIGTYPE -->
   <div class="step" id="step2">
     <h2>Hvilken boligtype har du?</h2>
-     <p style="text-align:center">Vi spør for å hente ut gjennomsnittlig forbruk i antall kWh for din bolig i ditt fylke.</p>
+     <p style="text-align:center">Vi spør for å hente ut gjennomsnittlig forbruk i antall kWh for din boligtype i ditt fylke.</p>
     <select id="boligtype">
       <option value="">Velg boligtype</option>
       <option>Enebolig</option>
@@ -123,7 +123,7 @@
   <!-- STEP 3 METODE -->
   <div class="step" id="step3">
     <h2>Vil du bruke gjennomsnittlig kWh-forbruk for din boligtype i ditt fylke?</h2>
-    <p style="text-align:center">I neste steg kan du evt. velge å legge inn eget forbruk om du vet det omtrentlige tallet.</p>
+    <p style="text-align:center">Du kan velge å bruke egne tall om ønskelig.</p>
     <div class="choice-container">
       <div class="choice-button" data-method="avg">Bruk snitt</div>
       <div class="choice-button" data-method="custom">Jeg vet forbruket mitt</div>
@@ -299,7 +299,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
     const norgesprisTotal = Math.round(totalForbruk * PRICE_NORGESPRIS);
 
     const anbefaling = norgesprisTotal < spotTotal
-      ? 'Norgespris er sannsynligvis billigere for deg.'
+      ? 'Basert på informasjonen du har gitt oss, er Norgespris sannsynligvis billigere for deg.'
       : 'Spotpris '+(supportApplied?'med':'uten')+' strømstøtte'+(hasEV && smartCharging?' og smartlading':'')+' er sannsynligvis billigere for deg.';
 
     const snittForbruk = (data[fylke] && data[fylke][bolig]) ? data[fylke][bolig] : baseForbruk;
