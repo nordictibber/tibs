@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Norgespris Kalkulator</title>
+  <style>
+    body{font-family:'Inter',sans-serif;background:#000;color:#fff;margin:0;padding:2rem;}
+    .step{display:none;max-width:600px;margin:0 auto;background:#000;padding:2rem;border-radius:8px;}
+    .step.active{display:block;}
+    h1,h2{margin-top:0;text-align:center;}
+    select,.choice-button,input[type=number]{width:100%;padding:1rem;margin-bottom:1rem;font-size:1rem;border-radius:8px;border:none;}
+    select,input[type=number]{background:#1a1a1a;color:#fff;}
+    input[type=number]{border:1px solid #444;-moz-appearance:textfield;}
+    input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0;}
+    .choice-container{display:flex;gap:1rem;justify-content:center;margin:1rem 0;flex-wrap:wrap;}
+    .choice-button{background:#23B8CC;color:#000;font-weight:600;cursor:pointer;text-align:center;transition:.2s;border:2px solid transparent;flex:1;min-width:120px;}
+    .choice-button:hover{filter:brightness(1.05);}    
+    .choice-button.selected{background:#158a99;color:#fff;border-color:#0f6d7a;}
+    button{background:#23B8CC;color:#000;padding:.75rem 1.5rem;border:none;border-radius:8px;font-size:1rem;cursor:pointer;display:block;margin:2rem auto 0 auto;}
+    a.back{color:#fff;text-decoration:underline;font-weight:500;display:block;text-align:center;margin-top:1rem;}
+    .result-box{background:#111;padding:1.5rem;border-radius:8px;box-shadow:0 0 8px rgba(0,0,0,.3);}    
+    .muted{opacity:.7;font-size:.9rem;text-align:left;margin-top:.5rem;font-family:inherit !important;color:inherit;font-weight:400;}
+    .result-box p{ text-align:left; font-family:inherit !important; }
+    .separator{height:1px;background:#333;margin:1.25rem 0;}
+    .recommend{background:#23B8CC;color:#000;padding:1rem 1.2rem;border-radius:6px;font-weight:600;margin-top:1.25rem;margin-bottom:1.5rem;line-height:1.45;}
+    .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;}
+    label{font-size:.9rem;display:block;margin-bottom:.25rem;text-align:center;}
+    .ev-intro{margin-bottom:1.5rem;}
+  </style>
+</head>
+<body>
+  <!-- STEP 0 START -->
+  <div class="step active" id="step0">
+    <h1>Bør du velge Norgespris?</h1>
+    <p style="text-align:center">Sjekk forbruket ditt basert på fylke og boligtype – og legg til elbillading om du har det.</p>
+    <button id="startBtn">Start</button>
+  </div>
+
+  <!-- STEP EV 1 -->
+  <div class="step" id="stepEV1">
+    <h2>Har du elbil og lader du hjemme?</h2>
+    <div class="choice-container">
+      <div class="choice-button" data-ev="yes">Ja</div>
+      <div class="choice-button" data-ev="no">Nei</div>
+    </div>
+    <a href="#" class="back" data-back="0">Tilbake</a>
+  </div>
+
+  <!-- STEP EV 2 details -->
+  <div class="step" id="stepEV2">
+    <h2>Elbil-forbruk</h2>
+    <p class="muted ev-intro">Vi har tatt utgangspunkt i en elbil med et 75 kWh batteri, et forbruk på 20 kWh/100 km og en årlig kjørelengde på 15 000 km, men du kan endre dette om du vet dine eksakte tall.</p>
+    <div class="grid-3">
+      <div>
+        <label for="evBattery">Bilens batteristørrelse (kWh)</label>
+        <input type="number" id="evBattery" placeholder="75" />
+      </div>
+      <div>
+        <label for="evPer100">Forbruk (kWh/100 km)</label>
+        <input type="number" id="evPer100" placeholder="20" />
+      </div>
+      <div>
+        <label for="evKmYear">Kjørelengde per år</label>
+        <input type="number" id="evKmYear" placeholder="15000" />
+      </div>
+    </div>
+    <button id="toSmart">Neste</button>
+    <a href="#" class="back" data-back="stepEV1">Tilbake</a>
+  </div>
+
+  <!-- STEP SMARTLADING -->
+  <div class="step" id="stepSmart">
+    <h2>Bruker du Smartlading fra Tibber?</h2>
+    <div class="choice-container">
+      <div class="choice-button" data-smart="yes">Ja</div>
+      <div class="choice-button" data-smart="no">Nei</div>
+    </div>
+    <a href="#" class="back" data-back="stepEV2">Tilbake</a>
+  </div>
+
+  <!-- STEP 1 FYLKE -->
+  <div class="step" id="step1">
+    <h2>Hvilket fylke bor du i?</h2>
+    <select id="fylke">
+      <option value="">Velg fylke</option>
+      <option>Oslo</option>
+      <option>Akershus</option>
+      <option>Østfold</option>
+      <option>Buskerud</option>
+      <option>Innlandet</option>
+      <option>Telemark</option>
+      <option>Vestfold</option>
+      <option>Agder</option>
+      <option>Rogaland</option>
+      <option>Vestland</option>
+      <option>Møre og Romsdal</option>
+      <option>Trøndelag</option>
+      <option>Nordland</option>
+      <option>Troms og Finnmark</option>
+    </select>
+    <button id="toStep2">Neste</button>
+    <a href="#" class="back" data-back="stepSmart">Tilbake</a>
+  </div>
+
+  <!-- STEP 2 BOLIGTYPE -->
+  <div class="step" id="step2">
+    <h2>Hvilken boligtype har du?</h2>
+    <select id="boligtype">
+      <option value="">Velg boligtype</option>
+      <option>Enebolig</option>
+      <option>Leilighet</option>
+      <option>Rekkehus</option>
+    </select>
+    <button id="toStep3">Neste</button>
+    <a href="#" class="back" data-back="1">Tilbake</a>
+  </div>
+
+  <!-- STEP 3 METODE -->
+  <div class="step" id="step3">
+    <h2>Vil du bruke gjennomsnittet for din boligtype i ditt fylke?<br>Eller vil du skrive inn selv?</h2>
+    <div class="choice-container">
+      <div class="choice-button" data-method="avg">Bruk snitt</div>
+      <div class="choice-button" data-method="custom">Jeg vet forbruket mitt</div>
+    </div>
+    <a href="#" class="back" data-back="2">Tilbake</a>
+  </div>
+
+  <!-- STEP 4 CUSTOM -->
+  <div class="step" id="step4">
+    <h2>Hva er ditt årsforbruk?</h2>
+    <input type="number" id="customKwh" placeholder="Mitt årsforbruk kWh" />
+    <button id="calcBtn">Neste</button>
+    <a href="#" class="back" data-back="3">Tilbake</a>
+  </div>
+
+  <!-- RESULT -->
+  <div class="step" id="resultStep">
+    <div class="result-box" id="results"></div>
+    <button id="restartBtn">Start på nytt</button>
+  </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', ()=>{
+  const PRICE_SPOT_WITH_SUPPORT = 0.9788; // kr/kWh
+  const PRICE_NORGESPRIS       = 0.50;   // kr/kWh
+  const SUPPORT_THRESHOLD      = 0.9375; // kr/kWh
+  const SMART_DISCOUNT         = 0.39;   // 39% rabatt på EV-spot-kost
+
+  const AVG_PRICE_2025 = {
+    'Oslo': 79.47, 'Akershus': 79.47, 'Østfold': 79.47, 'Buskerud': 79.47,
+    'Vestfold': 79.47, 'Innlandet': 79.47, 'Telemark': 86.71, 'Agder': 86.71,
+    'Rogaland': 86.71, 'Vestland': 65.23, 'Møre og Romsdal': 65.23,
+    'Trøndelag': 26.53, 'Nordland': 8.85, 'Troms': 8.85, 'Finnmark': 8.85,
+    'Troms og Finnmark': 8.85, 'Vestfold og Telemark': 79.47, 'Viken': 79.47
+  };
+
+  const data = {
+    'Oslo':                  { 'Enebolig': 21000, 'Rekkehus': 15500, 'Leilighet': 10300 },
+    'Akershus':              { 'Enebolig': 21000, 'Rekkehus': 15500, 'Leilighet': 10300 },
+    'Østfold':               { 'Enebolig': 21000, 'Rekkehus': 15500, 'Leilighet': 10300 },
+    'Buskerud':              { 'Enebolig': 21000, 'Rekkehus': 15500, 'Leilighet': 10300 },
+    'Innlandet':             { 'Enebolig': 21000, 'Rekkehus': 15500, 'Leilighet': 10300 },
+    'Telemark':              { 'Enebolig': 21000, 'Rekkehus': 15500, 'Leilighet': 10300 },
+    'Vestfold':              { 'Enebolig': 21000, 'Rekkehus': 15500, 'Leilighet': 10300 },
+    'Agder':                 { 'Enebolig': 21000, 'Rekkehus': 15500, 'Leilighet': 10300 },
+    'Rogaland':              { 'Enebolig': 21000, 'Rekkehus': 15500, 'Leilighet': 10300 },
+    'Vestland':              { 'Enebolig': 21000, 'Rekkehus': 15500, 'Leilighet': 10300 },
+    'Møre og Romsdal':       { 'Enebolig': 21000, 'Rekkehus': 15500, 'Leilighet': 10300 },
+    'Trøndelag':             { 'Enebolig': 21000, 'Rekkehus': 15500, 'Leilighet': 10300 },
+    'Nordland':              { 'Enebolig': 21000, 'Rekkehus': 15500, 'Leilighet': 10300 },
+    'Troms og Finnmark':     { 'Enebolig': 21000, 'Rekkehus': 15500, 'Leilighet': 10300 }
+  };
+
+  let useCustom = false;
+  let hasEV = false;
+  let smartCharging = false;
+  let evKwh = 0;
+
+  const steps = document.querySelectorAll('.step');
+  function showStep(id){ steps.forEach(s=>s.classList.remove('active')); document.getElementById(id)?.classList.add('active'); }
+  function nextStep(n){ if(typeof n==='string'){showStep(n);return;} showStep('step'+n); }
+
+  // Start
+  document.getElementById('startBtn').addEventListener('click',()=>showStep('stepEV1'));
+
+  // EV yes/no
+  document.querySelectorAll('#stepEV1 .choice-button').forEach(btn=>{
+    btn.addEventListener('click',e=>{
+      document.querySelectorAll('#stepEV1 .choice-button').forEach(b=>b.classList.remove('selected'));
+      e.currentTarget.classList.add('selected');
+      hasEV = e.currentTarget.dataset.ev === 'yes';
+      if(hasEV){ showStep('stepEV2'); } else { showStep('step1'); }
+    });
+  });
+
+  // Smartlading yes/no
+  document.querySelectorAll('#stepSmart .choice-button').forEach(btn=>{
+    btn.addEventListener('click',e=>{
+      document.querySelectorAll('#stepSmart .choice-button').forEach(b=>b.classList.remove('selected'));
+      e.currentTarget.classList.add('selected');
+      smartCharging = e.currentTarget.dataset.smart === 'yes';
+      showStep('step1');
+    });
+  });
+
+  document.getElementById('toSmart').addEventListener('click',()=>{
+    // kalkuler foreløpig EV kWh (kan endres senere i calculate())
+    const per100 = parseFloat(document.getElementById('evPer100').value)||20;
+    const km = parseFloat(document.getElementById('evKmYear').value)||15000;
+    evKwh = (km/100)*per100; // batteristørrelse brukes ikke i kWh-beregningen, men beholdes om ønsket
+    showStep('stepSmart');
+  });
+
+  // Fylke/bolig/forbruk steps
+  document.getElementById('toStep2').addEventListener('click',()=>nextStep(2));
+  document.getElementById('toStep3').addEventListener('click',()=>nextStep(3));
+  document.getElementById('calcBtn').addEventListener('click',calculate);
+  document.getElementById('restartBtn').addEventListener('click',restart);
+
+  // Back links
+  document.querySelectorAll('a.back').forEach(a=>{
+    a.addEventListener('click',e=>{
+      e.preventDefault();
+      const target=e.currentTarget.dataset.back;
+      if(target && isNaN(target)) showStep(target); else nextStep(parseInt(target,10));
+    });
+  });
+
+  // Metodevalg snitt/egen
+  document.querySelectorAll('#step3 .choice-button').forEach(btn=>{
+    btn.addEventListener('click', e => {
+      document.querySelectorAll('#step3 .choice-button').forEach(b=>b.classList.remove('selected'));
+      e.currentTarget.classList.add('selected');
+      useCustom = e.currentTarget.dataset.method === 'custom';
+      if(useCustom){
+        nextStep(4);
+      } else {
+        // Try to calculate, and fail gracefully so the UI doesn't hang
+        try {
+          calculate();
+        } catch(err){
+          console.error('Calculate crashed:', err);
+          alert('Noe gikk galt i beregningen. Prøv igjen.');
+        }
+      }
+    });
+  });
+
+  function restart(){
+    useCustom=false; hasEV=false; smartCharging=false; evKwh=0;
+    ['customKwh','evBattery','evPer100','evKmYear'].forEach(id=>{const el=document.getElementById(id); if(el) el.value='';});
+    showStep('step0');
+  }
+
+  function calculate(){
+    const fylke = document.getElementById('fylke').value;
+    const bolig = document.getElementById('boligtype').value;
+    if(!fylke||!bolig){alert('Vennligst velg både fylke og boligtype.');return;}
+
+    let baseForbruk;
+    if(useCustom){
+      const v=parseFloat(document.getElementById('customKwh').value);
+      if(!v||v<=0){alert('Skriv inn et gyldig årsforbruk i kWh.');return;}
+      baseForbruk=v;
+    } else {
+      if(!data[fylke]||!data[fylke][bolig]){alert('Fant ikke forbruksdata for kombinasjonen.');return;}
+      baseForbruk=data[fylke][bolig];
+    }
+
+    // Re-kalkuler EV kWh (in case user changed numbers after clicking next)
+    if(hasEV){
+      const per100 = parseFloat(document.getElementById('evPer100').value)||20;
+      const km = parseFloat(document.getElementById('evKmYear').value)||15000;
+      evKwh = (km/100)*per100;
+    } else {
+      evKwh = 0;
+    }
+
+    const totalForbruk = baseForbruk + evKwh;
+
+    const avgSpotKr = (AVG_PRICE_2025[fylke] ? AVG_PRICE_2025[fylke]/100 : PRICE_SPOT_WITH_SUPPORT).toFixed(4);
+    const supportApplied = parseFloat(avgSpotKr) > SUPPORT_THRESHOLD;
+    const effectiveSpot = supportApplied ? PRICE_SPOT_WITH_SUPPORT : parseFloat(avgSpotKr);
+
+    const householdSpotCost = Math.round(baseForbruk * effectiveSpot);
+    let evSpotCost = Math.round(evKwh * effectiveSpot);
+    let evSpotCostBeforeSmart = evSpotCost;
+    if(hasEV && smartCharging){
+      evSpotCost = Math.round(evSpotCost * (1 - SMART_DISCOUNT));
+    }
+
+    const spotTotal = householdSpotCost + evSpotCost;
+    const norgesprisTotal = Math.round(totalForbruk * PRICE_NORGESPRIS);
+
+    const anbefaling = norgesprisTotal < spotTotal
+      ? '👉 Norgespris er sannsynligvis billigere for deg.'
+      : '👉 Spotpris '+(supportApplied?'med':'uten')+' strømstøtte'+(hasEV && smartCharging?' og smartlading':'')+' gir deg lavere pris.';
+
+    const snittForbruk = (data[fylke] && data[fylke][bolig]) ? data[fylke][bolig] : baseForbruk;
+
+    // Build EV block
+    let evBlock = '';
+    if(hasEV){
+      evBlock = `
+        <p><strong>Elbil-lading hjemme:</strong> ${evKwh.toLocaleString('no-NO')} kWh</p>
+        <p class=\"muted\">Spotkostnad EV ${supportApplied?'(inkl. støtte)':''}: ${evSpotCostBeforeSmart.toLocaleString('no-NO')} kr${smartCharging?` → med Smartlading (-39%): ${evSpotCost.toLocaleString('no-NO')} kr`:''}</p>
+      `;
+    }
+
+    const spotNote = !supportApplied ? 'Strømstøtten slår ikke inn fordi gjennomsnittsprisen så langt i 2025 er under 93,75 øre/kWh.' : '';
+
+    document.getElementById('results').innerHTML = `
+      <h2 style=\"text-align:center\">Resultat</h2>
+      <p class=\"recommend\"><strong>Anbefaling:</strong> ${anbefaling}</p>
+      <p><strong>Fylke:</strong> ${fylke}</p>
+      <p><strong>Boligtype:</strong> ${bolig}</p>
+      <p><strong>Årsforbruk husholdning:</strong> ${baseForbruk.toLocaleString('no-NO')} kWh (${useCustom?'egendefinert':'snitt'})</p>
+      ${evBlock}
+      <p><strong>Totalt årlig forbruk:</strong> ${totalForbruk.toLocaleString('no-NO')} kWh</p>
+      <p><strong>Årlig kostnad med spotpris ${supportApplied?'(inkl. støtte)':'(uten støtte)'}:</strong> ${spotTotal.toLocaleString('no-NO')} kr</p>
+      <p><strong>Årlig kostnad med Norgespris:</strong> ${norgesprisTotal.toLocaleString('no-NO')} kr</p>
+      <div class=\"separator\"></div>
+      <p class=\"muted\">Gj.snitt spotpris 2025 i ${fylke}: ${(parseFloat(avgSpotKr)).toFixed(2)} kr/kWh (inkl. mva).</p>
+      <p class=\"muted\">Gj.snittsforbruk i ${fylke} for ${bolig}: ${snittForbruk.toLocaleString('no-NO')} kWh.</p>
+      ${spotNote ? `<p class=\"muted\">${spotNote}</p>` : ''}
+      <p class=\"muted\">Prisforutsetninger: Norgespris 50 øre/kWh inkl. mva. Gjennomsnitt spotpris så langt i 2025 (oppdatert 23. juli 2025). Prisene inkluderer ikke nettleie eller eventuelle påslag.</p>
+    `;
+
+    showStep('resultStep');
+  }
+
+  function runTests(){
+    console.assert(typeof data['Oslo']['Leilighet']==='number','Datastruktur feil: Oslo/Leilighet forbruk mangler');
+    const kWh=10000; const spotWith=Math.round(kWh*PRICE_SPOT_WITH_SUPPORT); const npris=Math.round(kWh*PRICE_NORGESPRIS);
+    console.assert(spotWith===9788 && npris===5000,'Custom beregning feil');
+    // EV test
+    const evTestKwh = (15000/100)*20; // 3000
+    const evSpot = Math.round(evTestKwh*PRICE_SPOT_WITH_SUPPORT);
+    const evSmart = Math.round(evSpot*(1-SMART_DISCOUNT));
+    console.assert(evTestKwh===3000,'EV kWh feil');
+    console.assert(evSmart < evSpot,'Smartlading rabatt feil');
+    console.log('Alle tester OK');
+  }
+  runTests();
+});
+</script>
+</body>
+</html>
